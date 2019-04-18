@@ -552,6 +552,7 @@ class VectorLineEdit(QtWidgets.QWidget):
     use inputMode="float" to restrict the data entry to decimal numbers
     """
     textChanged = QtCore.Signal(tuple)
+    textModified = QtCore.Signal(tuple)
 
     def __init__(self, label, value, axis=("x", "y", "z"), parent=None, toolTip="", inputMode="float", labelRatio=1,
                  editRatio=1, spacing=uic.SREG):
@@ -586,6 +587,8 @@ class VectorLineEdit(QtWidgets.QWidget):
         for i, v in enumerate(axis):
             edit = LineEdit(text=value[i], placeholder="", parent=parent, toolTip=toolTip, inputMode=inputMode)
             # edit.setObjectName("".join([label, v]))  # might not need a label name?  Leave this line in case
+
+            edit.textModified.connect(self._onTextModified)
             edit.textChanged.connect(self._onTextChanged)
             self._widgets[v] = edit
             vectorEditLayout.addWidget(edit)
@@ -595,9 +598,14 @@ class VectorLineEdit(QtWidgets.QWidget):
     def _onTextChanged(self):
         """updates the text, should also update the dict
         """
-        # todo: check that the methods below work, not tested
         valueList = [self._widgets[axis].text() for axis in self._widgets]
         self.textChanged.emit(tuple(valueList))
+
+    def _onTextModified(self):
+        """updates the text, should also update the dict
+        """
+        valueList = [self._widgets[axis].text() for axis in self._widgets]
+        self.textModified.emit(tuple(valueList))
 
     def widget(self, axis):
         """Gets the widget from the axis string name
