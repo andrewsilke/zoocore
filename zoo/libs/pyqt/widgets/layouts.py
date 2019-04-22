@@ -88,6 +88,15 @@ class ExtendedLineEdit(QtWidgets.QLineEdit):
         self.returnPressed.connect(self.__handleReturnPressed)
         self._before = ""
 
+    def __getBeforeAfter(self):
+        """returns the before state and the after
+
+        Checks if the textbox is a float, if so compare the numbers to account for irrelevant decimal differences"""
+        if type(self.validator()) == QtGui.QDoubleValidator:  # float
+            return float(self._before), float(self.text())
+        else:
+            return self._before, self.text()
+
     def __handleTextChanged(self, text):
         """If text has changed update self._before
         """
@@ -97,7 +106,7 @@ class ExtendedLineEdit(QtWidgets.QLineEdit):
     def __handleEditingFinished(self):
         """if text has changed and editingFinished emit textModified
         """
-        before, after = self._before, self.text()
+        before, after = self.__getBeforeAfter()
         if before != after:
             self._before = after
             self.textModified.emit()
@@ -105,7 +114,7 @@ class ExtendedLineEdit(QtWidgets.QLineEdit):
     def __handleReturnPressed(self):
         """if text hasn't changed and returnPressed emit textModified
         """
-        before, after = self._before, self.text()
+        before, after = self.__getBeforeAfter()
         if before == after:
             self.textModified.emit()
 
@@ -963,7 +972,7 @@ class labelColorBtn(QtWidgets.QWidget):
         If Cancel is pressed the color is invalid and nothing happens
         """
         initialPickColor = QtGui.QColor(self.storedRgbColor[0], self.storedRgbColor[1], self.storedRgbColor[2], 255)
-        color = QtWidgets.QColorDialog.getColor(initialPickColor)  # expects 255 range
+        color = QtWidgets.QColorDialog.colorLinearInt(initialPickColor)  # expects 255 range
         if QtGui.QColor.isValid(color):
             rgbList = (color.getRgb())[0:3]
             self.setColor(rgbList)
