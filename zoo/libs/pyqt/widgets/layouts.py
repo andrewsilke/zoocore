@@ -947,7 +947,7 @@ class labelColorBtn(QtWidgets.QWidget):
         self.setLayout(self.layout)
         self.connections()
 
-    def setColor(self, rgbList):
+    def setColorSrgbInt(self, rgbList):
         """Sets the color of the button as per a rgb list in 0-255 range
 
         :param rgbList: r g b color in 255 range eg [255, 0, 0]
@@ -958,13 +958,13 @@ class labelColorBtn(QtWidgets.QWidget):
         color = QtGui.QColor(self.storedRgbColor[0], self.storedRgbColor[1], self.storedRgbColor[2], 255)
         self.colorPickerBtn.setStyleSheet("background-color: {}".format(color.name()))
 
-    def setColorSrgb(self, rgbList):
+    def setColorSrgbFloat(self, rgbList):
         """Sets the color of the button as per a rgb list in 0-1 range, colors are not rounded
 
-        :param rgbList: r g b color in 255 range eg [1.0, 0.0, 0.0]
+        :param rgbList: r g b color in float range eg [1.0, 0.0, 0.0]
         :type rgbList: list
         """
-        self.setColor([color * 255 for color in rgbList])
+        self.setColorSrgbInt([color * 255 for color in rgbList])
 
     def pickColor(self):
         """Opens the color picker window
@@ -972,10 +972,10 @@ class labelColorBtn(QtWidgets.QWidget):
         If Cancel is pressed the color is invalid and nothing happens
         """
         initialPickColor = QtGui.QColor(self.storedRgbColor[0], self.storedRgbColor[1], self.storedRgbColor[2], 255)
-        color = QtWidgets.QColorDialog.colorLinearInt(initialPickColor)  # expects 255 range
+        color = QtWidgets.QColorDialog.getColor(initialPickColor)  # expects 255 range
         if QtGui.QColor.isValid(color):
             rgbList = (color.getRgb())[0:3]
-            self.setColor(rgbList)
+            self.setColorSrgbInt(rgbList)
             self.colorChanged.emit(color)
 
     def rgbColor(self):
