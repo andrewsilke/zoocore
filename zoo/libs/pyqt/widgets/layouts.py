@@ -83,12 +83,12 @@ class ExtendedLineEdit(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         super(ExtendedLineEdit, self).__init__(parent)
-        self.editingFinished.connect(self.__handleEditingFinished)
-        self.textChanged.connect(self.__handleTextChanged)
-        self.returnPressed.connect(self.__handleReturnPressed)
+        self.editingFinished.connect(self._handleEditingFinished)
+        self.textChanged.connect(self._handleTextChanged)
+        self.returnPressed.connect(self._handleReturnPressed)
         self._before = ""
 
-    def __getBeforeAfter(self):
+    def _getBeforeAfter(self):
         """returns the before state and the after
 
         Checks if the textbox is a float, if so compare the numbers to account for irrelevant decimal differences"""
@@ -97,24 +97,24 @@ class ExtendedLineEdit(QtWidgets.QLineEdit):
         else:
             return self._before, self.text()
 
-    def __handleTextChanged(self, text):
+    def _handleTextChanged(self, text):
         """If text has changed update self._before
         """
         if not self.hasFocus():
             self._before = text
 
-    def __handleEditingFinished(self):
+    def _handleEditingFinished(self):
         """if text has changed and editingFinished emit textModified
         """
-        before, after = self.__getBeforeAfter()
+        before, after = self._getBeforeAfter()
         if before != after:
             self._before = after
             self.textModified.emit()
 
-    def __handleReturnPressed(self):
+    def _handleReturnPressed(self):
         """if text hasn't changed and returnPressed emit textModified
         """
-        before, after = self.__getBeforeAfter()
+        before, after = self._getBeforeAfter()
         if before == after:
             self.textModified.emit()
 
