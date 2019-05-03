@@ -237,6 +237,14 @@ class StringEdit(QtWidgets.QWidget):
         """Change the text at any time"""
         self.edit.setText(value)
 
+    def setLabelFixedWidth(self, width):
+        """Set the fixed width of the label"""
+        self.label.setFixedWidth(utils.dpiScale(width))
+
+    def setTxtFixedWidth(self, width):
+        """Set the fixed width of the lineEdit"""
+        self.edit.setFixedWidth(utils.dpiScale(width))
+
     def text(self):
         """get the text of self.edit"""
         return self.edit.text()
@@ -301,6 +309,7 @@ class ComboBoxSearchable(QtWidgets.QWidget):
         :param parent: the qt parent
         :type parent: class
         """
+        # TODO needs to stylesheet the lineEdit text entry
         super(ComboBoxSearchable, self).__init__(parent=parent)
         layout = hBoxLayout(parent=None, margins=(0, 0, 0, 0),
                             spacing=utils.dpiScale(uic.SPACING))  # margins kwarg should be added
@@ -376,6 +385,22 @@ class ComboBoxSearchable(QtWidgets.QWidget):
         index = self.findText(text, QtCore.Qt.MatchFixedString)
         if index >= 0:
             self.setCurrentIndex(index)
+
+    def setIndex(self, index):
+        """Sets the combo box to the current index number
+
+        :param index: Sets the combo box to the current index
+        :type index: int
+        """
+        self.box.setCurrentIndex(index)
+
+    def setLabelFixedWidth(self, width):
+        """Set the fixed width of the label"""
+        self.label.setFixedWidth(utils.dpiScale(width))
+
+    def setBoxFixedWidth(self, width):
+        """Set the fixed width of the lineEdit"""
+        self.box.setFixedWidth(utils.dpiScale(width))
 
 
 def comboBox(items=(), parent=None, toolTip="", setIndex=0, sortAlphabetically=False):
@@ -527,6 +552,14 @@ class ComboBoxRegular(QtWidgets.QWidget):
         if index >= 0:
             self.box.removeItem(index)
 
+    def setLabelFixedWidth(self, width):
+        """Set the fixed width of the label"""
+        self.label.setFixedWidth(utils.dpiScale(width))
+
+    def setBoxFixedWidth(self, width):
+        """Set the fixed width of the lineEdit"""
+        self.box.setFixedWidth(utils.dpiScale(width))
+
 
 def CheckBoxRegular(label="", setChecked=False, parent=None, toolTip="", enableMenu=False):
     """Creates a regular QCheckbox check box (on off) with extra simple options
@@ -649,6 +682,27 @@ class VectorLineEdit(QtWidgets.QWidget):
         keys = self._widgets.keys()
         for i, v in enumerate(value):
             self._widgets[keys[i]].setText(str(v))
+
+    def setLabelFixedWidth(self, width):
+        """Set the fixed width of the label"""
+        self.label.setFixedWidth(utils.dpiScale(width))
+
+    def hideLineEdit(self, axisInt):
+        """hides one of the lineEdits from by index from self.axis list
+
+        :param axisInt: the index of the lineEdit to hide
+        :type axisInt: int
+        """
+        self._widgets[self.axis[axisInt]].hide()
+
+    def showLineEdit(self, axisInt):
+        """shows one of the lineEdits from by index from self.axis list
+
+        :param axisInt: the index of the lineEdit to hide
+        :type axisInt: int
+        """
+        self._widgets[self.axis[axisInt]].show()
+
 
 
 class VectorSpinBox(QtWidgets.QWidget):

@@ -105,6 +105,19 @@ def openLocation(path):
         subprocess.Popen(["xdg-open", os.path.dirname(path)])
 
 
+def openDirectory(fileNamePath):
+    """Opens the native OS folder to the directory of file name
+    similar to os.startfile(filename) but also supporting osx and linux
+
+    :param fileNamePath: the path to the directory or file
+    :type fileNamePath: str
+    """
+    if sys.platform == "win32":
+        os.startfile(fileNamePath)
+    else:
+        opener ="open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, fileNamePath])
+
 @clearUnMasked
 def copyFile(src, dst, permissions=0666):
     """Copy file and sets its permissions.
