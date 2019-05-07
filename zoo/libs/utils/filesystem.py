@@ -123,7 +123,7 @@ def openDirectory(directoryPath):
     if sys.platform == "win32":
         os.startfile(directoryPath)
     else:
-        opener ="open" if sys.platform == "darwin" else "xdg-open"
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
         subprocess.call([opener, directoryPath])
 
 
@@ -445,6 +445,40 @@ def loadFile(filepath):
         return
     with open(filepath) as f:
         yield f
+
+
+def loadFileTxt(pathDirectory, fileName):
+    """loads a file as text
+
+    :param pathDirectory: the directory path
+    :type pathDirectory: str
+    :param fileName: the file name
+    :type fileName: str
+    :return textFile: the text file
+    :rtype textFile: str
+    """
+    currentFile = os.path.join(pathDirectory, fileName)
+    with open(currentFile, "r") as myfile:  # add returns
+        textFile = myfile.read().replace('', '')
+    return textFile
+
+
+def saveFileTxt(formattedText, newfile):
+    """Saves a string to a file
+
+    :param formattedText: the text
+    :type formattedText: str
+    :param newfile: the file to be saved full path
+    :type newfile: str
+    """
+    file = open(newfile, "wb")
+    file.write(formattedText)
+    file.close()
+
+
+def osTempDirectory():
+    """Returns the temp directory of the current OS"""
+    return os.environ.get('TEMP', os.environ.get('TMP', os.environ.get('TMPDIR', '/tmp')))
 
 
 def createZipWithProgress(zippath, files):
