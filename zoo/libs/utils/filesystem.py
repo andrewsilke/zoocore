@@ -447,7 +447,7 @@ def loadFile(filepath):
         yield f
 
 
-def loadFileTxt(pathDirectory, fileName):
+def loadFileTxt(filePath):
     """loads a file as text
 
     :param pathDirectory: the directory path
@@ -457,9 +457,8 @@ def loadFileTxt(pathDirectory, fileName):
     :return textFile: the text file
     :rtype textFile: str
     """
-    currentFile = os.path.join(pathDirectory, fileName)
-    with open(currentFile, "r") as myfile:  # add returns
-        textFile = myfile.read().replace('', '')
+    with open(filePath, "r") as fileInstance:
+        textFile = fileInstance.read()
     return textFile
 
 
@@ -471,14 +470,8 @@ def saveFileTxt(formattedText, newfile):
     :param newfile: the file to be saved full path
     :type newfile: str
     """
-    file = open(newfile, "wb")
-    file.write(formattedText)
-    file.close()
-
-
-def osTempDirectory():
-    """Returns the temp directory of the current OS"""
-    return os.environ.get('TEMP', os.environ.get('TMP', os.environ.get('TMPDIR', '/tmp')))
+    with open(newfile, "wb") as fileInstance:
+        fileInstance.write(formattedText)
 
 
 def createZipWithProgress(zippath, files):
